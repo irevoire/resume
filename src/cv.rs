@@ -1,4 +1,4 @@
-use egui::{Context, RichText};
+use egui::RichText;
 
 #[derive(Clone, Default)]
 pub struct Cv {}

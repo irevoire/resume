@@ -1,16 +1,14 @@
-use crate::{
-    cv::Cv,
-};
+use crate::{cv::Cv, maze::Maze};
 use egui::Layout;
 use serde::Deserialize;
 
-#[derive(Default, Clone)]
+#[derive(Default)]
 pub struct Resume {
     viewing: View,
     cv: Cv,
     //snake: Snake,
     //pong: Pong,
-    //maze: Maze,
+    maze: Maze,
     //life: Life,
 }
 
@@ -30,10 +28,11 @@ impl Resume {
         Resume {
             viewing: View::default(),
             cv: Cv::default(),
+            maze: Maze::default(),
         }
     }
 
-    pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+    pub fn ui(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
             egui::menu::bar(ui, |ui| {
                 egui::widgets::global_dark_light_mode_buttons(ui);
@@ -48,7 +47,7 @@ impl Resume {
             View::Resume => Cv::cv(ctx),
             View::Snake => todo!(),
             View::Pong => todo!(),
-            View::Maze => todo!(),
+            View::Maze => self.maze.ui(ctx, frame),
             View::Life => todo!(),
         }
     }
