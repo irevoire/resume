@@ -56,21 +56,26 @@ impl Maze {
             };
 
             ui.label("Wall:");
-            let rgba:u32 = self.config.wall_color;
-            let [r, g, b, a] = rgba.to_ne_bytes();
-            let mut colour = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour);
+            let rgba_wall:u32 = self.config.wall_color;
+            let [r, g, b, a] = rgba_wall.to_ne_bytes();
+            let mut colour_wall = Rgba::from_srgba_premultiplied(r, g, b, a);
+            color_edit_button_rgba(ui, &mut colour_wall, Alpha::Opaque);
+            let convert_color = Rgba::to_srgba_unmultiplied(&colour_wall);
             let wall_color = u32::from_ne_bytes(convert_color);
             self.config.wall_color = wall_color;
 
             ui.label("Path:");
-            let rgba = self.config.path_color;
-            let [r, g, b, a] = rgba.to_ne_bytes();
-            let mut colour = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour);
-            let path_color = u32::from_ne_bytes(convert_color);
+            let rgba_path = self.config.path_color;
+            let [r, g, b, a] = rgba_path.to_ne_bytes();
+            let mut colour_path = Rgba::from_srgba_premultiplied(r, g, b, a);
+            color_edit_button_rgba(ui, &mut colour_path, Alpha::Opaque);
+            let convert_color = Rgba::to_srgba_unmultiplied(&colour_path);
+            let mut path_color = u32::from_ne_bytes(convert_color);
+            if path_color == wall_color && wall_color != u32::MAX {
+                path_color = path_color + 1;
+            } else if path_color == wall_color && wall_color == u32::MAX {
+                path_color = path_color - 1;
+            }
             self.config.path_color = path_color;
 
             let mut rng = rand::rngs::StdRng::seed_from_u64(self.seed);
