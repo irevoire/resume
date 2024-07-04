@@ -1606,7 +1606,7 @@ dependencies = [
 [[package]]
 name = "maze"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/maze.git?rev=ec58cef#ec58cef5821a63d38f47b8d0514da80e71f08903"
+source = "git+https://github.com/NoodleSamaChan/maze.git?rev=7fccc03#7fccc036802b826d6028acf8f06b1416d71e352e"
 dependencies = [
  "graphic",
  "rand",
