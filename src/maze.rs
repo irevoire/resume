@@ -10,10 +10,11 @@ use crate::{draw_window_buffer, InputWrapper};
 pub struct Maze {
     buffer: WindowBuffer,
     seed: u64,
-    config: MazeConfig,
+    pub config: MazeConfig,
     player: Player,
     start_point: (usize, usize),
     update_time_wait: Instant,
+    opened_walls: usize,
 }
 
 impl Default for Maze {
@@ -43,6 +44,7 @@ impl Default for Maze {
             start_point,
             buffer,
             update_time_wait: Instant::now(),
+            opened_walls: 0,
         }
     }
 }
@@ -58,26 +60,55 @@ impl Maze {
 
             ui.label("Wall:");
             let rgba_wall:u32 = self.config.wall_color;
-            let [r, g, b, a] = rgba_wall.to_ne_bytes();
+            let [r, g, b, a] = rgba_wall.to_le_bytes();
             let mut colour_wall = Rgba::from_srgba_premultiplied(r, g, b, a);
             color_edit_button_rgba(ui, &mut colour_wall, Alpha::Opaque);
             let convert_color = Rgba::to_srgba_unmultiplied(&colour_wall);
-            let wall_color = u32::from_ne_bytes(convert_color);
+            let wall_color = u32::from_le_bytes(convert_color);
             self.config.wall_color = wall_color;
+
+            ui.separator();
 
             ui.label("Path:");
             let rgba_path = self.config.path_color;
-            let [r, g, b, a] = rgba_path.to_ne_bytes();
+            let [r, g, b, a] = rgba_path.to_le_bytes();
             let mut colour_path = Rgba::from_srgba_premultiplied(r, g, b, a);
             color_edit_button_rgba(ui, &mut colour_path, Alpha::Opaque);
             let convert_color = Rgba::to_srgba_unmultiplied(&colour_path);
-            let mut path_color = u32::from_ne_bytes(convert_color);
+            let mut path_color = u32::from_le_bytes(convert_color);
             if path_color == wall_color && wall_color != u32::MAX {
                 path_color = path_color + 1;
             } else if path_color == wall_color && wall_color == u32::MAX {
                 path_color = path_color - 1;
             }
             self.config.path_color = path_color;
+
+            ui.separator();
+
+            ui.label("Colour player:");
+            let rgba_player:u32 = self.player.player_color;
+            let [r, g, b, a] = rgba_player.to_le_bytes();
+            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
+            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
+            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
+            let player_color = u32::from_le_bytes(convert_color);
+            self.player.player_color = player_color;
+
+            ui.separator();
+
+            ui.label("Colour ending:");
+            let rgba_ending:u32 = self.player.finish_color;
+            let [r, g, b, a] = rgba_ending.to_le_bytes();
+            let mut colour_ending = Rgba::from_srgba_premultiplied(r, g, b, a);
+            color_edit_button_rgba(ui, &mut colour_ending, Alpha::Opaque);
+            let convert_color = Rgba::to_srgba_unmultiplied(&colour_ending);
+            let ending_color = u32::from_le_bytes(convert_color);
+            self.player.finish_color = ending_color;
+
+            ui.separator();
+
+            ui.label("Difficulty:");
+            ui.add(egui::DragValue::new(&mut self.opened_walls).speed(1));
 
             let mut rng = rand::rngs::StdRng::seed_from_u64(self.seed);
             self.config.generate(&mut self.buffer, &mut rng);
