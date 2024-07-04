@@ -19,9 +19,10 @@ pub struct Maze {
 impl Default for Maze {
     fn default() -> Self {
         let mut buffer: WindowBuffer = WindowBuffer::new(30, 30);
-
-        let mut rng = rand::thread_rng();
-        let seed: u64 = rng.gen();
+        
+        let mut buff = [0;8];
+        getrandom::getrandom(&mut buff).unwrap();
+        let seed: u64 = u64::from_be_bytes(buff);
         let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
         let config = MazeConfig::default();
         config.generate(&mut buffer, &mut rng);
