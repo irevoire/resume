@@ -1,9 +1,12 @@
-use egui::{color_picker::{color_edit_button_rgba, Alpha}, Rgba, Ui};
+use egui::{
+    color_picker::{color_edit_button_rgba, Alpha},
+    Rgba, Ui,
+};
+use maze::start_end_generator;
 use maze::{display, MazeConfig, Player};
-use rand::{Rng, SeedableRng};
+use rand::SeedableRng;
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
-use maze::start_end_generator;
 
 use crate::{draw_window_buffer, InputWrapper};
 
@@ -20,8 +23,8 @@ pub struct Maze {
 impl Default for Maze {
     fn default() -> Self {
         let mut buffer: WindowBuffer = WindowBuffer::new(30, 30);
-        
-        let mut buff = [0;8];
+
+        let mut buff = [0; 8];
         getrandom::getrandom(&mut buff).unwrap();
         let seed: u64 = u64::from_be_bytes(buff);
         let mut rng = rand::rngs::StdRng::seed_from_u64(seed);
@@ -49,7 +52,6 @@ impl Default for Maze {
     }
 }
 
-
 impl Maze {
     pub fn configuration(&mut self, ui: &mut Ui) -> egui::Response {
         ui.vertical(|ui| {
@@ -59,7 +61,7 @@ impl Maze {
             };
 
             ui.label("Wall:");
-            let rgba_wall:u32 = self.config.wall_color;
+            let rgba_wall: u32 = self.config.wall_color;
             let [r, g, b, a] = rgba_wall.to_le_bytes();
             let mut colour_wall = Rgba::from_srgba_premultiplied(r, g, b, a);
             color_edit_button_rgba(ui, &mut colour_wall, Alpha::Opaque);
@@ -86,7 +88,7 @@ impl Maze {
             ui.separator();
 
             ui.label("Colour player:");
-            let rgba_player:u32 = self.player.player_color;
+            let rgba_player: u32 = self.player.player_color;
             let [r, g, b, a] = rgba_player.to_le_bytes();
             let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
             color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
@@ -97,7 +99,7 @@ impl Maze {
             ui.separator();
 
             ui.label("Colour ending:");
-            let rgba_ending:u32 = self.player.finish_color;
+            let rgba_ending: u32 = self.player.finish_color;
             let [r, g, b, a] = rgba_ending.to_le_bytes();
             let mut colour_ending = Rgba::from_srgba_premultiplied(r, g, b, a);
             color_edit_button_rgba(ui, &mut colour_ending, Alpha::Opaque);
@@ -114,16 +116,16 @@ impl Maze {
             self.config.generate(&mut self.buffer, &mut rng);
             self.player.maze_config = self.config.clone();
             display(&self.player, &mut self.buffer);
-
         })
         .response
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        
         let elapsed_time = Duration::from_millis(10 as u64);
         ctx.input(|i| {
-            let _ = self.player.handle_user_input(&InputWrapper{input: i}, &self.start_point);
+            let _ = self
+                .player
+                .handle_user_input(&InputWrapper { input: i }, &self.start_point);
         });
 
         if self.update_time_wait.elapsed() >= elapsed_time {
@@ -133,8 +135,6 @@ impl Maze {
         }
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
 
-        egui::CentralPanel::default().show(ctx, |ui| {
-            draw_window_buffer(ui, &self.buffer)
-        });
+        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
     }
 }

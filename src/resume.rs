@@ -1,4 +1,4 @@
-use crate::{cv::Cv, maze::Maze};
+use crate::{cv::Cv, maze::Maze, pong::Pong};
 use egui::Layout;
 use serde::Deserialize;
 
@@ -7,7 +7,7 @@ pub struct Resume {
     viewing: View,
     cv: Cv,
     //snake: Snake,
-    //pong: Pong,
+    pong: Pong,
     maze: Maze,
     //life: Life,
 }
@@ -29,6 +29,7 @@ impl Resume {
             viewing: View::default(),
             cv: Cv::default(),
             maze: Maze::default(),
+            pong: Pong::default(),
         }
     }
 
@@ -46,7 +47,7 @@ impl Resume {
         match self.viewing {
             View::Resume => Cv::cv(ctx),
             View::Snake => todo!(),
-            View::Pong => todo!(),
+            View::Pong => self.pong.ui(ctx, frame),
             View::Maze => self.maze.ui(ctx, frame),
             View::Life => todo!(),
         }

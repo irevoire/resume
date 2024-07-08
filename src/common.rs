@@ -3,7 +3,7 @@ use graphic::Graphic;
 use window_rs::WindowBuffer;
 
 pub struct InputWrapper<'a> {
-    pub input: &'a InputState
+    pub input: &'a InputState,
 }
 
 impl Graphic for InputWrapper<'_> {
@@ -144,41 +144,41 @@ impl Graphic for InputWrapper<'_> {
 }
 
 pub fn draw_window_buffer(ui: &mut egui::Ui, window: &WindowBuffer) {
-        let size = 30;
-        egui::ScrollArea::both().show(ui, |ui| {
-            let (response, painter) = ui.allocate_painter(
-                Vec2::new(
-                    (size * window.width()) as f32,
-                    (size * window.height()) as f32,
-                ),
-                Sense::hover(),
-            );
+    let size = 30;
+    egui::ScrollArea::both().show(ui, |ui| {
+        let (response, painter) = ui.allocate_painter(
+            Vec2::new(
+                (size * window.width()) as f32,
+                (size * window.height()) as f32,
+            ),
+            Sense::hover(),
+        );
 
-            let base_position = response.rect.left_top().to_vec2();
-            for x in 0..window.width() {
-                for y in 0..window.height() {
-                    let color = window[(x, y)];
+        let base_position = response.rect.left_top().to_vec2();
+        for x in 0..window.width() {
+            for y in 0..window.height() {
+                let color = window[(x, y)];
 
-                    let rect = egui::Rect {
-                        min: Pos2 {
-                            x: x as f32 * size as f32,
-                            y: y as f32 * size as f32,
-                        },
-                        max: Pos2 {
-                            x: (x + 1) as f32 * size as f32,
-                            y: (y + 1) as f32 * size as f32,
-                        },
-                    };
+                let rect = egui::Rect {
+                    min: Pos2 {
+                        x: x as f32 * size as f32,
+                        y: y as f32 * size as f32,
+                    },
+                    max: Pos2 {
+                        x: (x + 1) as f32 * size as f32,
+                        y: (y + 1) as f32 * size as f32,
+                    },
+                };
 
-                    let rect = rect.translate(base_position);
+                let rect = rect.translate(base_position);
 
-                    let [r, g, b, a] = color.to_ne_bytes();
-                    painter.rect_filled(
-                        rect,
-                        Rounding::ZERO,
-                        Color32::from_rgba_premultiplied(r, g, b, a),
-                    );
-                }
+                let [r, g, b, a] = color.to_ne_bytes();
+                painter.rect_filled(
+                    rect,
+                    Rounding::ZERO,
+                    Color32::from_rgba_premultiplied(r, g, b, a),
+                );
             }
-        });
-    }
+        }
+    });
+}
