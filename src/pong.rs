@@ -79,7 +79,6 @@ impl Pong {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let elapsed_time = Duration::from_millis(10 as u64);
         ctx.input(|i| {
             let _ = self
                 .config
