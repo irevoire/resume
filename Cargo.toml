@@ -23,7 +23,7 @@ maze = {git = "https://github.com/NoodleSamaChan/maze.git", rev = "032fe3c", def
 window_rs = {git = "https://github.com/NoodleSamaChan/window_rs.git", rev = "6068419"}
 graphic = {git = "https://github.com/NoodleSamaChan/graphic.git", rev = "4cf1ea4", default-features = false}
 getrandom = {version = "0.2.15", features = ["js"]}
-pong = {git = "https://github.com/NoodleSamaChan/pong.git", rev = "d7ed2ff", default-features = false}
+pong = {git = "https://github.com/NoodleSamaChan/pong.git", rev = "bcf4ab5", default-features = false}
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }
