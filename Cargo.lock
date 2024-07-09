@@ -1454,7 +1454,6 @@ name = "graphic"
 version = "0.1.0"
 source = "git+https://github.com/NoodleSamaChan/graphic.git?rev=4cf1ea4#4cf1ea4a0517cebf6533d89465242fd95ab5c26a"
 dependencies = [
- "minifb",
  "window_rs",
 ]
 
@@ -2221,7 +2220,7 @@ dependencies = [
 [[package]]
 name = "pong"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/pong.git?rev=4f08233#4f082334f7c5df93a08f78ed884264223438c590"
+source = "git+https://github.com/NoodleSamaChan/pong.git?rev=d7ed2ff#d7ed2ff31bca76200ca9963eff742ecef91bc9af"
 dependencies = [
  "clap",
  "graphic",
