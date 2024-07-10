@@ -1,8 +1,8 @@
 use egui::Ui;
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
-use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
+use std::time::Instant;
 
 use crate::{draw_window_buffer, InputWrapper};
 
