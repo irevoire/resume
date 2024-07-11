@@ -37,7 +37,7 @@ impl Graphic for InputWrapper<'_> {
         }
     }
 
-    fn update_with_buffer(&mut self, windows: &WindowBuffer) {
+    fn update_with_buffer(&mut self, _windows: &WindowBuffer) {
         todo!()
     }
 
