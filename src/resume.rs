@@ -1,6 +1,4 @@
 use crate::{cv::Cv, maze::Maze, pong::Pong};
-use egui::Layout;
-use serde::Deserialize;
 
 #[derive(Default)]
 pub struct Resume {
@@ -24,7 +22,7 @@ enum View {
 
 impl Resume {
     /// Called once before the first frame.
-    pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
+    pub fn new(_cc: &eframe::CreationContext<'_>) -> Self {
         Resume {
             viewing: View::default(),
             cv: Cv::default(),

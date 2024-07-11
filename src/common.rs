@@ -7,7 +7,7 @@ pub struct InputWrapper<'a> {
 }
 
 impl Graphic for InputWrapper<'_> {
-    fn new(name: &str, width: usize, height: usize) -> Self {
+    fn new(_name: &str, _width: usize, _height: usize) -> Self {
         todo!()
     }
 

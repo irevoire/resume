@@ -9,8 +9,6 @@ use crate::{draw_window_buffer, InputWrapper};
 pub struct Pong {
     buffer: WindowBuffer,
     config: World,
-    seed: u64,
-    update_time_wait: Instant,
     instant_ball: Instant,
     instant_pong: Instant,
     cli: Cli,
@@ -48,8 +46,6 @@ impl Default for Pong {
         Self {
             buffer,
             config,
-            seed,
-            update_time_wait: Instant::now(),
             instant_ball: Instant::now(),
             instant_pong: Instant::now(),
             cli,
@@ -79,16 +75,17 @@ impl Pong {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        creation_pongs(&mut self.config, &self.buffer);
+        
         ctx.input(|i| {
             let _ = self
                 .config
                 .handle_user_input(&InputWrapper { input: i }, &self.buffer);
         });
 
-        creation_pongs(&mut self.config, &self.buffer);
-
         self.config.update(&mut self.buffer, &self.cli, &mut self.instant_pong, &mut self.instant_ball);
         display(&self.config, &mut self.buffer);
+        ctx.request_repaint();
 
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
 

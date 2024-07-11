@@ -2106,7 +2106,7 @@ dependencies = [
 [[package]]
 name = "pong"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/pong.git?rev=1a9f143#1a9f1432492017c69c02ac7a1c98079c41b2cab8"
+source = "git+https://github.com/NoodleSamaChan/pong.git?rev=65b72e3#65b72e30fd47097d8a9eba941231a1b0f801b9cc"
 dependencies = [
  "clap",
  "graphic",
