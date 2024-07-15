@@ -2,9 +2,8 @@ use egui::{color_picker::{color_edit_button_rgba, Alpha}, Rgba, Ui};
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
 use window_rs::WindowBuffer;
-use std::time::Instant;
-
 use crate::{draw_window_buffer, InputWrapper};
+use web_time::Instant;
 
 pub struct Pong {
     buffer: WindowBuffer,

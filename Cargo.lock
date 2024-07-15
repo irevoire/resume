@@ -2106,11 +2106,12 @@ dependencies = [
 [[package]]
 name = "pong"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/pong.git?rev=1d8986d#1d8986d7da539e6116ac984fb0419f43c0a9d6b7"
+source = "git+https://github.com/NoodleSamaChan/pong.git?rev=d0ae76e#d0ae76e01609f9c3beef7fc742354e6e48231cad"
 dependencies = [
  "clap",
  "graphic",
  "rand",
+ "web-time 1.1.0",
  "window_rs",
 ]
 
@@ -2280,6 +2281,7 @@ dependencies = [
  "pong",
  "rand",
  "serde",
+ "snake",
  "wasm-bindgen-futures",
  "web-sys",
  "web-time 1.1.0",
@@ -2470,6 +2472,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "74212e6bbe9a4352329b2f68ba3130c15a3f26fe88ff22dbdc6cdd58fa85e99c"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "snake"
+version = "0.1.0"
+source = "git+https://github.com/NoodleSamaChan/snake.git?rev=8760049#8760049f09b6d697703a83d33860764e34bb0238"
+dependencies = [
+ "clap",
+ "graphic",
+ "rand",
+ "window_rs",
 ]
 
 [[package]]
