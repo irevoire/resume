@@ -1,9 +1,12 @@
-use egui::{color_picker::{color_edit_button_rgba, Alpha}, Rgba, Ui};
+use crate::{draw_window_buffer, InputWrapper};
+use egui::{
+    color_picker::{color_edit_button_rgba, Alpha},
+    Rgba, Ui,
+};
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
-use window_rs::WindowBuffer;
-use crate::{draw_window_buffer, InputWrapper};
 use web_time::Instant;
+use window_rs::WindowBuffer;
 
 pub struct Pong {
     buffer: WindowBuffer,
@@ -44,7 +47,7 @@ impl Default for Pong {
             0xFF00FF00,
             0xFFFFFF00,
         );
-        
+
         Self {
             buffer,
             config,
@@ -107,7 +110,6 @@ impl Pong {
             self.config.ball_colour = ball_color;
 
             ui.separator();
-
         })
         .response
     }
@@ -115,21 +117,25 @@ impl Pong {
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if self.config.player_1_pong.is_empty() == true {
             creation_pongs(&mut self.config, &self.buffer)
-        } 
-        
+        }
+
         ctx.input(|i| {
             let _ = self
                 .config
                 .handle_user_input(&InputWrapper { input: i }, &self.buffer);
         });
 
-        self.config.update(&mut self.buffer, &self.cli, &mut self.instant_pong, &mut self.instant_ball);
+        self.config.update(
+            &mut self.buffer,
+            &self.cli,
+            &mut self.instant_pong,
+            &mut self.instant_ball,
+        );
         display(&self.config, &mut self.buffer);
         ctx.request_repaint();
 
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-        
+
         egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
     }
-
 }

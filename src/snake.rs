@@ -101,8 +101,8 @@ impl Snake {
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         if self.config.player_1_pong.is_empty() == true {
             creation_pongs(&mut self.config, &self.buffer)
-        } 
-        
+        }
+
         ctx.input(|i| {
             let _ = self
                 .config
@@ -114,7 +114,7 @@ impl Snake {
         ctx.request_repaint();
 
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-        
+
         egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
     }
 
