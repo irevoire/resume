@@ -2477,7 +2477,7 @@ dependencies = [
 [[package]]
 name = "snake"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/snake.git?rev=c4db384#c4db3841b4f9fa846e2019c688de6c899ccbe997"
+source = "git+https://github.com/NoodleSamaChan/snake.git?rev=da63334#da633344b252ea1455252fedda31dab2a1c6b85f"
 dependencies = [
  "clap",
  "graphic",

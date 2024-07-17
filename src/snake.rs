@@ -21,7 +21,9 @@ pub struct SnakeOptions {
     snake_size: usize,
     ghost_mode: bool,
     first_snake_colour: u32,
+    first_snake_head_colour: u32,
     second_snake_colour: u32,
+    second_snake_head_colour: u32,
     food_colour: u32,
     bad_berry_colour: u32,
 }
@@ -60,8 +62,10 @@ impl Default for Snake {
             Direction::Still,
             0,
             0x0033CCFF,
+            0x00CC66FF,
             0x00CC33FF,
-            0x0000FF00,
+            0x00FFCC00,
+            0x0066CC33,
             0x00FF0000,
         );
         let options = SnakeOptions {
@@ -71,8 +75,10 @@ impl Default for Snake {
             snake_size: 3,
             ghost_mode: false,
             first_snake_colour: 0x0033CCFF,
+            first_snake_head_colour: 0x00CC66FF,
             second_snake_colour: 0x00CC33FF,
-            food_colour: 0x0000FF00,
+            second_snake_head_colour: 0x00FFCC00,
+            food_colour: 0x0066CC33,
             bad_berry_colour: 0x00FF0000,
         };
         Self {
@@ -98,6 +104,8 @@ impl Snake {
         base_snake.config.second_snake_colour = self.options.second_snake_colour;
         base_snake.config.food_colour = self.options.food_colour;
         base_snake.config.bad_berries_colour = self.options.bad_berry_colour;
+        base_snake.config.first_snake_head_colour = self.options.first_snake_head_colour;
+        base_snake.config.second_snake_head_colour = self.options.second_snake_head_colour;
         Self {
             buffer: base_snake.buffer,
             config: base_snake.config,
@@ -143,11 +151,27 @@ impl Snake {
 
             ui.separator();
 
+            ui.label("Colour of the head of snake player 1:");
+            let rgba_first_snake: u32 = self.config.first_snake_head_colour;
+            let first_snake_head_colour = colour_changer(rgba_first_snake, ui);
+            self.config.first_snake_head_colour = first_snake_head_colour;
+            self.options.first_snake_head_colour = self.config.first_snake_head_colour;
+
+            ui.separator();
+
             ui.label("Colour snake player 1:");
             let rgba_first_snake: u32 = self.config.first_snake_colour;
             let first_snake_colour = colour_changer(rgba_first_snake, ui);
             self.config.first_snake_colour = first_snake_colour;
             self.options.first_snake_colour = self.config.first_snake_colour;
+
+            ui.separator();
+
+            ui.label("Colour of the head of snake player 2:");
+            let rgba_second_snake: u32 = self.config.second_snake_head_colour;
+            let second_snake_head_colour = colour_changer(rgba_second_snake, ui);
+            self.config.second_snake_head_colour = second_snake_head_colour;
+            self.options.second_snake_head_colour = self.config.second_snake_head_colour;
 
             ui.separator();
 
