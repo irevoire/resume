@@ -1,4 +1,4 @@
-use crate::{draw_window_buffer, InputWrapper};
+use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
 use egui::{
     color_picker::{color_edit_button_rgba, Alpha},
     Rgba, Ui,
@@ -80,33 +80,21 @@ impl Pong {
 
             ui.label("Colour player 1:");
             let rgba_player: u32 = self.config.player_1_colour;
-            let [r, g, b, a] = rgba_player.to_le_bytes();
-            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-            let player_color = u32::from_le_bytes(convert_color);
+            let player_color = colour_changer(rgba_player, ui);
             self.config.player_1_colour = player_color;
 
             ui.separator();
 
             ui.label("Colour player 2:");
             let rgba_player: u32 = self.config.player_2_colour;
-            let [r, g, b, a] = rgba_player.to_le_bytes();
-            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-            let player_color = u32::from_le_bytes(convert_color);
+            let player_color = colour_changer(rgba_player, ui);
             self.config.player_2_colour = player_color;
 
             ui.separator();
 
             ui.label("Colour ball:");
             let rgba_ball: u32 = self.config.ball_colour;
-            let [r, g, b, a] = rgba_ball.to_le_bytes();
-            let mut colour_ball = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_ball, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_ball);
-            let ball_color = u32::from_le_bytes(convert_color);
+            let ball_color = colour_changer(rgba_ball, ui);
             self.config.ball_colour = ball_color;
 
             ui.separator();

@@ -1,32 +1,111 @@
-/* use snake::{Cli, World};
+use eframe::glow::Buffer;
+use egui::Ui;
+use snake::{display, go_display, return_in_time, snake_generator, Cli, Difficulty, Direction, TimeCycle, World};
+use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
-use crate::{draw_window_buffer, InputWrapper};
+use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
 
 pub struct Snake {
     buffer: WindowBuffer,
     config: World,
     cli: Cli,
+    snake_instant: Instant,
+    options: SnakeOptions,
+}
+
+pub struct SnakeOptions {
+    snake_speed: usize,
+    two_player: bool,
+    bad_berries: bool,
+    snake_size: usize,
+    ghost_mode: bool,
+    first_snake_colour: u32,
+    second_snake_colour: u32,
+    food_colour: u32,
+    bad_berry_colour: u32,
 }
 
 impl Default for Snake {
     fn default() -> Self {
-        let cli = Cli{
-            width: todo!(),
-            height: todo!(),
-            snake_size_start: todo!(),
-            file_path: todo!(),
-            snake_speed: todo!(),
-            speed_increase: todo!(),
-            bad_berries: todo!(),
-            ghost_mode: todo!(),
-            two_players_mode: todo!(),
+        let cli = Cli {
+            width: 80,
+            height: 50,
+            snake_size_start: 3,
+            file_path: None,
+            snake_speed: 30,
+            speed_increase: Difficulty::Medium,
+            bad_berries: false,
+            ghost_mode: false,
+            two_players_mode: false,
+        };
+        let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
+        let config = World::new(
+            Direction::Still,
+            vec![Direction::Still],
+            Vec::new(),
+            (0, 0),
+            false,
+            Instant::now(),
+            0,
+            cli.snake_speed,
+            0,
+            0,
+            None,
+            Vec::new(),
+            TimeCycle::Forward,
+            Some(Vec::new()),
+            vec![Direction::Still],
+            Some(Vec::new()),
+            Direction::Still,
+            0,
+            0x0033CCFF,
+            0x00CC33FF,
+            0x0000FF00,
+            0x00FF0000,
+        );
+        let options = SnakeOptions {
+            snake_speed: 30,
+            two_player: false,
+            bad_berries: false,
+            snake_size: 3,
+            ghost_mode: false,
+            first_snake_colour: 0x0033CCFF,
+            second_snake_colour: 0x00CC33FF,
+            food_colour: 0x0000FF00,
+            bad_berry_colour: 0x00FF0000,
+        };
+        Self {
+            buffer,
+            config,
+            cli,
+            snake_instant: Instant::now(),
+            options,
         }
-
     }
 }
 
 impl Snake {
+    pub fn new_snake_w_options(&mut self) -> Self {
+        let mut base_snake = Snake::default();
+
+        base_snake.cli.bad_berries = self.options.bad_berries;
+        base_snake.cli.snake_size_start = self.options.snake_size;
+        base_snake.cli.ghost_mode = self.options.ghost_mode;
+        base_snake.cli.snake_speed = self.options.snake_speed;
+        base_snake.cli.two_players_mode = self.options.two_player;
+        base_snake.config.first_snake_colour = self.options.first_snake_colour;
+        base_snake.config.second_snake_colour = self.options.second_snake_colour;
+        base_snake.config.food_colour = self.options.food_colour;
+        base_snake.config.bad_berries_colour = self.options.bad_berry_colour;
+        Self {
+            buffer: base_snake.buffer,
+            config: base_snake.config,
+            cli: base_snake.cli,
+            snake_instant: base_snake.snake_instant,
+            options: base_snake.options,
+        }
+    }
     pub fn configuration(&mut self, ui: &mut Ui) -> egui::Response {
         ui.vertical(|ui| {
             ui.label("Reset snake board:");
@@ -37,86 +116,115 @@ impl Snake {
             ui.separator();
 
             ui.label("Snake starting size:");
-            ui.add(egui::DragValue::new(&mut self.cli.ball_speed).speed(1).range(10));
+            ui.add(egui::Slider::new(&mut self.options.snake_size, 0..=10).suffix("pixels"));
 
             ui.separator();
 
             ui.label("Snake speed:");
-            ui.add(egui::DragValue::new(&mut self.cli.pong_speed).speed(1));
+            ui.add(egui::DragValue::new(&mut self.options.snake_speed).speed(1));
 
             ui.separator();
 
             ui.label("Bad berries:");
-            ui.add(egui::Checkbox::new(&mut my_bool, "Checked"));
+            ui.add(egui::Checkbox::new(&mut self.options.bad_berries, "Checked"));
 
             ui.separator();
 
             ui.label("Ghost mode:");
-            ui.add(egui::Checkbox::new(&mut my_bool, "Checked"));
+            ui.add(egui::Checkbox::new(&mut self.options.ghost_mode, "Checked"));
 
             ui.separator();
 
             ui.label("2 players:");
-            ui.add(egui::Checkbox::new(&mut my_bool, "Checked"));
+            ui.add(egui::Checkbox::new(
+                &mut self.options.two_player,
+                "Checked",
+            ));
 
             ui.separator();
 
-            ui.label("Colour player 1:");
-            let rgba_player: u32 = self.config.player_1_colour;
-            let [r, g, b, a] = rgba_player.to_le_bytes();
-            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-            let player_color = u32::from_le_bytes(convert_color);
-            self.config.player_1_colour = player_color;
+            ui.label("Colour snake player 1:");
+            let rgba_first_snake: u32 = self.config.first_snake_colour;
+            let first_snake_colour = colour_changer(rgba_first_snake, ui);
+            self.config.first_snake_colour = first_snake_colour;
+            self.options.first_snake_colour = self.config.first_snake_colour;
 
             ui.separator();
 
-            ui.label("Colour player 2:");
-            let rgba_player: u32 = self.config.player_2_colour;
-            let [r, g, b, a] = rgba_player.to_le_bytes();
-            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-            let player_color = u32::from_le_bytes(convert_color);
-            self.config.player_2_colour = player_color;
+            ui.label("Colour snake player 2:");
+            let rgba_second_snake: u32 = self.config.second_snake_colour;
+            let second_snake_colour = colour_changer(rgba_second_snake, ui);
+            self.config.second_snake_colour = second_snake_colour;
+            self.options.second_snake_colour = self.config.second_snake_colour;
 
             ui.separator();
 
-            ui.label("Colour ball:");
-            let rgba_ball: u32 = self.config.ball_colour;
-            let [r, g, b, a] = rgba_ball.to_le_bytes();
-            let mut colour_ball = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_ball, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_ball);
-            let ball_color = u32::from_le_bytes(convert_color);
-            self.config.ball_colour = ball_color;
+            ui.label("Colour berry:");
+            let rgba_berry: u32 = self.config.food_colour;
+            let berry_colour = colour_changer(rgba_berry, ui);
+            self.config.food_colour = berry_colour;
+            self.options.food_colour = self.config.food_colour;
 
             ui.separator();
 
+            ui.label("Colour bad berry:");
+            let rgba_bad_berry: u32 = self.config.bad_berries_colour;
+            let bad_berry_colour = colour_changer(rgba_bad_berry, ui);
+            self.config.bad_berries_colour = bad_berry_colour;
+            self.options.bad_berry_colour = self.config.bad_berries_colour;
+
+            ui.separator();
+
+            ui.label("Create snake board with all your options:");
+            if ui.add(egui::Button::new("Create")).clicked() {
+                *self = self.new_snake_w_options();
+            };
         })
         .response
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        if self.config.player_1_pong.is_empty() == true {
-            creation_pongs(&mut self.config, &self.buffer)
-        }
 
+        if self.config.food == (0,0) {
+            self.config.food_generator(&self.buffer, &self.cli)
+        };
+
+        if self.config.snake.is_empty() {
+            snake_generator(&mut self.config, &self.buffer, &self.cli);
+        };
         ctx.input(|i| {
-            let _ = self
-                .config
-                .handle_user_input(&InputWrapper { input: i }, &self.buffer);
+            let _ =
+                self.config
+                    .handle_user_input(&InputWrapper { input: i }, &self.cli, &self.buffer);
         });
 
-        self.config.update(&mut self.buffer, &self.cli, &mut self.instant_pong, &mut self.instant_ball);
-        display(&self.config, &mut self.buffer);
+        if self.config.time_cycle == TimeCycle::Forward {
+            if self.config.finished == false {
+                let elapsed_time = Duration::from_millis(self.config.snake_speed as u64);
+
+                if self.snake_instant.elapsed() >= elapsed_time {
+                    self.config.update(&mut self.buffer, &self.cli);
+                    self.snake_instant = Instant::now();
+                }
+                display(&self.config, &mut self.buffer, &self.cli);
+            } else {
+                go_display(&mut self.config, &mut self.buffer, &self.cli);
+            }
+        } else if self.config.time_cycle == TimeCycle::Backward {
+            let elapsed_time = Duration::from_millis(100);
+
+            if self.snake_instant.elapsed() >= elapsed_time {
+                return_in_time(&mut self.config, &self.cli);
+                self.snake_instant = Instant::now();
+            }
+            display(&mut self.config, &mut self.buffer, &self.cli);
+            self.config.time_cycle = TimeCycle::Pause;
+        }
+
         ctx.request_repaint();
 
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
 
         egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
     }
-
 }
-*/

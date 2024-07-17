@@ -1,4 +1,7 @@
-use egui::{Color32, InputState, Key, Pos2, Rounding, Sense, Vec2};
+use egui::{
+    color_picker::{color_edit_button_rgba, Alpha},
+    Color32, InputState, Key, Pos2, Rgba, Rounding, Sense, Ui, Vec2,
+};
 use graphic::Graphic;
 use window_rs::WindowBuffer;
 
@@ -144,15 +147,12 @@ impl Graphic for InputWrapper<'_> {
 }
 
 pub fn draw_window_buffer(ui: &mut egui::Ui, window: &WindowBuffer) {
-    let size = 30;
+    let max_width = ui.available_width();
+    let max_height = ui.available_height();
+    let size = (max_width / window.width() as f32).min(max_height / window.height() as f32);
     egui::ScrollArea::both().show(ui, |ui| {
-        let (response, painter) = ui.allocate_painter(
-            Vec2::new(
-                (size * window.width()) as f32,
-                (size * window.height()) as f32,
-            ),
-            Sense::hover(),
-        );
+        let (response, painter) =
+            ui.allocate_painter(Vec2::new(max_width, ui.available_height()), Sense::hover());
 
         let base_position = response.rect.left_top().to_vec2();
         for x in 0..window.width() {
@@ -161,12 +161,12 @@ pub fn draw_window_buffer(ui: &mut egui::Ui, window: &WindowBuffer) {
 
                 let rect = egui::Rect {
                     min: Pos2 {
-                        x: x as f32 * size as f32,
-                        y: y as f32 * size as f32,
+                        x: x as f32 * size,
+                        y: y as f32 * size,
                     },
                     max: Pos2 {
-                        x: (x + 1) as f32 * size as f32,
-                        y: (y + 1) as f32 * size as f32,
+                        x: (x + 1) as f32 * size,
+                        y: (y + 1) as f32 * size,
                     },
                 };
 
@@ -181,4 +181,14 @@ pub fn draw_window_buffer(ui: &mut egui::Ui, window: &WindowBuffer) {
             }
         }
     });
+}
+
+pub fn colour_changer(rgba_colour_to_change: u32, ui: &mut Ui) -> u32 {
+    let [r, g, b, a] = rgba_colour_to_change.to_le_bytes();
+    let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
+    color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
+    let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
+    let player_color = u32::from_le_bytes(convert_color);
+
+    player_color
 }

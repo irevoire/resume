@@ -8,7 +8,7 @@ use rand::SeedableRng;
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
-use crate::{draw_window_buffer, InputWrapper};
+use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
 
 pub struct Maze {
     buffer: WindowBuffer,
@@ -62,22 +62,14 @@ impl Maze {
 
             ui.label("Wall:");
             let rgba_wall: u32 = self.config.wall_color;
-            let [r, g, b, a] = rgba_wall.to_le_bytes();
-            let mut colour_wall = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_wall, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_wall);
-            let wall_color = u32::from_le_bytes(convert_color);
+            let wall_color = colour_changer(rgba_wall, ui);
             self.config.wall_color = wall_color;
 
             ui.separator();
 
             ui.label("Path:");
             let rgba_path = self.config.path_color;
-            let [r, g, b, a] = rgba_path.to_le_bytes();
-            let mut colour_path = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_path, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_path);
-            let mut path_color = u32::from_le_bytes(convert_color);
+            let mut path_color = colour_changer(rgba_path, ui);
             if path_color == wall_color && wall_color != u32::MAX {
                 path_color = path_color + 1;
             } else if path_color == wall_color && wall_color == u32::MAX {
@@ -89,22 +81,19 @@ impl Maze {
 
             ui.label("Colour player:");
             let rgba_player: u32 = self.player.player_color;
-            let [r, g, b, a] = rgba_player.to_le_bytes();
-            let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-            let player_color = u32::from_le_bytes(convert_color);
+            let player_color = colour_changer(rgba_player, ui);
             self.player.player_color = player_color;
 
             ui.separator();
 
             ui.label("Colour ending:");
             let rgba_ending: u32 = self.player.finish_color;
-            let [r, g, b, a] = rgba_ending.to_le_bytes();
-            let mut colour_ending = Rgba::from_srgba_premultiplied(r, g, b, a);
-            color_edit_button_rgba(ui, &mut colour_ending, Alpha::Opaque);
-            let convert_color = Rgba::to_srgba_unmultiplied(&colour_ending);
-            let ending_color = u32::from_le_bytes(convert_color);
+            let mut ending_color = colour_changer(rgba_ending, ui);
+            if ending_color == wall_color && wall_color != u32::MAX {
+                ending_color = ending_color + 1;
+            } else if ending_color == wall_color && wall_color == u32::MAX {
+                ending_color = ending_color - 1;
+            }
             self.player.finish_color = ending_color;
 
             ui.separator();
