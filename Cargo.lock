@@ -1266,7 +1266,7 @@ dependencies = [
 [[package]]
 name = "game_of_life"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/rust_project.git?rev=22a4575#22a457525d34d167062328d7890d77f909795db4"
+source = "git+https://github.com/NoodleSamaChan/rust_project.git?rev=dd9a17c#dd9a17cf9348c2f92700aa3abc14d11e329a4b21"
 dependencies = [
  "clap",
  "graphic",

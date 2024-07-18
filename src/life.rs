@@ -20,7 +20,13 @@ impl Default for Life {
             file_path: None,
         };
         let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
-        let config = World::new(WindowBuffer::new(cli.width, cli.height), 0, Instant::now(), 2, 0x0066CC33);
+        let config = World::new(
+            WindowBuffer::new(cli.width, cli.height),
+            0,
+            Instant::now(),
+            2,
+            0x0066CC33,
+        );
         let time_check = Instant::now();
 
         Self {
@@ -51,7 +57,6 @@ impl Life {
 
             ui.label("Speed of the game:");
             ui.add(egui::Slider::new(&mut self.config.speed, 0..=50));
-
         })
         .response
     }
@@ -73,7 +78,6 @@ impl Life {
 
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
 
-        egui::CentralPanel::default()
-            .show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
+        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
     }
 }

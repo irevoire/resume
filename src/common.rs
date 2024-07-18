@@ -139,9 +139,9 @@ impl Graphic for InputWrapper<'_> {
 
     fn get_mouse_down(&self, mouse: graphic::Mouse) -> bool {
         match mouse {
-            graphic::Mouse::Left => self.input.pointer.primary_down(),
-            graphic::Mouse::Right => self.input.pointer.secondary_down(),
-            graphic::Mouse::Discard => self.input.pointer.primary_down(),
+            graphic::Mouse::Left => self.input.pointer.primary_clicked(),
+            graphic::Mouse::Right => self.input.pointer.secondary_clicked(),
+            graphic::Mouse::Discard => self.input.pointer.secondary_clicked(),
         }
     }
 }
