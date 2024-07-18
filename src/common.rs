@@ -68,7 +68,7 @@ impl Graphic for InputWrapper<'_> {
 
     fn get_keys_released(&self) -> Vec<graphic::Key> {
         let mut ret = vec![];
-        if self.input.key_released(Key::ArrowUp){
+        if self.input.key_released(Key::ArrowUp) {
             ret.push(graphic::Key::Up)
         }
         if self.input.key_released(Key::ArrowDown) {

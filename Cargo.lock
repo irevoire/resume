@@ -2477,11 +2477,12 @@ dependencies = [
 [[package]]
 name = "snake"
 version = "0.1.0"
-source = "git+https://github.com/NoodleSamaChan/snake.git?rev=da63334#da633344b252ea1455252fedda31dab2a1c6b85f"
+source = "git+https://github.com/NoodleSamaChan/snake.git?rev=e49847d#e49847d5b3a5f3d38e768b2e1706949ff760cbe2"
 dependencies = [
  "clap",
  "graphic",
  "rand",
+ "web-time 1.1.0",
  "window_rs",
 ]
 

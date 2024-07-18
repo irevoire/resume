@@ -1,5 +1,8 @@
 use egui::Ui;
-use snake::{display, go_display, return_in_time, snake_generator, Cli, Difficulty, Direction, TimeCycle, World};
+use snake::{
+    display, go_display, return_in_time, snake_generator, Cli, Difficulty, Direction, TimeCycle,
+    World,
+};
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
@@ -133,7 +136,10 @@ impl Snake {
             ui.separator();
 
             ui.label("Bad berries:");
-            ui.add(egui::Checkbox::new(&mut self.options.bad_berries, "Checked"));
+            ui.add(egui::Checkbox::new(
+                &mut self.options.bad_berries,
+                "Checked",
+            ));
 
             ui.separator();
 
@@ -143,10 +149,7 @@ impl Snake {
             ui.separator();
 
             ui.label("2 players:");
-            ui.add(egui::Checkbox::new(
-                &mut self.options.two_player,
-                "Checked",
-            ));
+            ui.add(egui::Checkbox::new(&mut self.options.two_player, "Checked"));
 
             ui.separator();
 
@@ -207,8 +210,7 @@ impl Snake {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-
-        if self.config.food == (0,0) {
+        if self.config.food == (0, 0) {
             self.config.food_generator(&self.buffer, &self.cli)
         };
 
