@@ -25,6 +25,7 @@ graphic = {git = "https://github.com/NoodleSamaChan/graphic.git", rev = "4cf1ea4
 getrandom = {version = "0.2.15", features = ["js"]}
 pong = {git = "https://github.com/NoodleSamaChan/pong.git", rev = "d1427d3", default-features = false}
 snake = {git = "https://github.com/NoodleSamaChan/snake.git", rev = "e49847d", default-features = false}
+game_of_life = {git = "https://github.com/NoodleSamaChan/rust_project.git", rev = "22a4575", default-features = false}
 
 # You only need serde if you want app persistence:
 serde = { version = "1", features = ["derive"] }

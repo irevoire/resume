@@ -1264,6 +1264,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "game_of_life"
+version = "0.1.0"
+source = "git+https://github.com/NoodleSamaChan/rust_project.git?rev=22a4575#22a457525d34d167062328d7890d77f909795db4"
+dependencies = [
+ "clap",
+ "graphic",
+ "web-time 1.1.0",
+ "window_rs",
+]
+
+[[package]]
 name = "generic-array"
 version = "0.14.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2274,6 +2285,7 @@ dependencies = [
  "eframe",
  "egui",
  "env_logger",
+ "game_of_life",
  "getrandom",
  "graphic",
  "log",

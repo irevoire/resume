@@ -1,4 +1,4 @@
-use crate::{cv::Cv, maze::Maze, pong::Pong, snake::Snake};
+use crate::{cv::Cv, life::Life, maze::Maze, pong::Pong, snake::Snake};
 
 #[derive(Default)]
 pub struct Resume {
@@ -8,7 +8,7 @@ pub struct Resume {
     snake: Snake,
     pong: Pong,
     maze: Maze,
-    //life: Life,
+    life: Life,
 }
 
 #[derive(Default, Clone, Copy, PartialEq, Eq)]
@@ -30,6 +30,7 @@ impl Resume {
             maze: Maze::default(),
             pong: Pong::default(),
             snake: Snake::default(),
+            life: Life::default(),
         }
     }
 
@@ -49,7 +50,7 @@ impl Resume {
             View::Snake => self.snake.ui(ctx, frame),
             View::Pong => self.pong.ui(ctx, frame),
             View::Maze => self.maze.ui(ctx, frame),
-            View::Life => todo!(),
+            View::Life => self.life.ui(ctx, frame),
         }
     }
 }

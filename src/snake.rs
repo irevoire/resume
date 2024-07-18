@@ -248,9 +248,11 @@ impl Snake {
                     .handle_user_input(&InputWrapper { input: i }, &self.cli, &self.buffer);
         });
 
-        if (self.points_to_reach == self.config.score / 10) || (self.points_to_reach == self.config.second_score / 10) {
-                self.config.finished = true;
-            }
+        if (self.points_to_reach == self.config.score / 10)
+            || (self.points_to_reach == self.config.second_score / 10)
+        {
+            self.config.finished = true;
+        }
 
         if self.config.time_cycle == TimeCycle::Forward {
             if !self.config.finished {
@@ -261,7 +263,6 @@ impl Snake {
                     self.snake_instant = Instant::now();
                 }
                 display(&self.config, &mut self.buffer, &self.cli);
-            
             } else {
                 go_display(&mut self.config, &mut self.buffer, &self.cli);
             }
