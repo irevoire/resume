@@ -14,6 +14,7 @@ pub struct Snake {
     cli: Cli,
     snake_instant: Instant,
     options: SnakeOptions,
+    points_to_reach: usize,
 }
 
 pub struct SnakeOptions {
@@ -28,6 +29,7 @@ pub struct SnakeOptions {
     second_snake_head_colour: u32,
     food_colour: u32,
     bad_berry_colour: u32,
+    points_to_reach: usize,
 }
 
 impl Default for Snake {
@@ -82,6 +84,7 @@ impl Default for Snake {
             second_snake_head_colour: 0x00FFCC00,
             food_colour: 0x0066CC33,
             bad_berry_colour: 0x00FF0000,
+            points_to_reach: 15,
         };
         Self {
             buffer,
@@ -89,6 +92,7 @@ impl Default for Snake {
             cli,
             snake_instant: Instant::now(),
             options,
+            points_to_reach: 15,
         }
     }
 }
@@ -108,12 +112,14 @@ impl Snake {
         base_snake.config.bad_berries_colour = self.options.bad_berry_colour;
         base_snake.config.first_snake_head_colour = self.options.first_snake_head_colour;
         base_snake.config.second_snake_head_colour = self.options.second_snake_head_colour;
+        base_snake.points_to_reach = self.options.points_to_reach;
         Self {
             buffer: base_snake.buffer,
             config: base_snake.config,
             cli: base_snake.cli,
             snake_instant: base_snake.snake_instant,
             options: base_snake.options,
+            points_to_reach: base_snake.points_to_reach,
         }
     }
     pub fn configuration(&mut self, ui: &mut Ui) -> egui::Response {
@@ -127,6 +133,11 @@ impl Snake {
 
             ui.label("Snake starting size:");
             ui.add(egui::Slider::new(&mut self.options.snake_size, 0..=10).suffix("pixels"));
+
+            ui.separator();
+
+            ui.label("Number of points to reach:");
+            ui.add(egui::Slider::new(&mut self.options.points_to_reach, 0..=50).suffix("points"));
 
             ui.separator();
 
@@ -201,6 +212,20 @@ impl Snake {
 
             ui.separator();
 
+            ui.label("Player 1 points:");
+            let mut points = self.config.score.clone() as f32;
+            let max = (self.points_to_reach as f32) * 10.0;
+            ui.add(egui::Slider::new(&mut points, 0.0..=max).suffix("points"));
+
+            ui.separator();
+
+            ui.label("Player 2 points:");
+            let mut points = self.config.second_score.clone() as f32;
+            let max = (self.points_to_reach as f32) * 10.0;
+            ui.add(egui::Slider::new(&mut points, 0.0..=max).suffix("points"));
+
+            ui.separator();
+
             ui.label("Create snake board with all your options:");
             if ui.add(egui::Button::new("Create")).clicked() {
                 *self = self.new_snake_w_options();
@@ -223,6 +248,10 @@ impl Snake {
                     .handle_user_input(&InputWrapper { input: i }, &self.cli, &self.buffer);
         });
 
+        if (self.points_to_reach == self.config.score / 10) || (self.points_to_reach == self.config.second_score / 10) {
+                self.config.finished = true;
+            }
+
         if self.config.time_cycle == TimeCycle::Forward {
             if !self.config.finished {
                 let elapsed_time = Duration::from_millis(self.config.snake_speed as u64);
@@ -232,6 +261,7 @@ impl Snake {
                     self.snake_instant = Instant::now();
                 }
                 display(&self.config, &mut self.buffer, &self.cli);
+            
             } else {
                 go_display(&mut self.config, &mut self.buffer, &self.cli);
             }
