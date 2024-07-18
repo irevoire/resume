@@ -68,55 +68,55 @@ impl Graphic for InputWrapper<'_> {
 
     fn get_keys_released(&self) -> Vec<graphic::Key> {
         let mut ret = vec![];
-        if self.input.key_released(Key::ArrowUp) == true {
+        if self.input.key_released(Key::ArrowUp){
             ret.push(graphic::Key::Up)
         }
-        if self.input.key_released(Key::ArrowDown) == true {
+        if self.input.key_released(Key::ArrowDown) {
             ret.push(graphic::Key::Down)
         }
-        if self.input.key_released(Key::ArrowLeft) == true {
+        if self.input.key_released(Key::ArrowLeft) {
             ret.push(graphic::Key::Left)
         }
-        if self.input.key_released(Key::ArrowRight) == true {
+        if self.input.key_released(Key::ArrowRight) {
             ret.push(graphic::Key::Right)
         }
-        if self.input.key_released(Key::Escape) == true {
+        if self.input.key_released(Key::Escape) {
             ret.push(graphic::Key::Escape)
         }
-        if self.input.key_released(Key::Delete) == true {
+        if self.input.key_released(Key::Delete) {
             ret.push(graphic::Key::Quit)
         }
-        if self.input.key_released(Key::Space) == true {
+        if self.input.key_released(Key::Space) {
             ret.push(graphic::Key::Space)
         }
-        if self.input.key_released(Key::E) == true {
+        if self.input.key_released(Key::E) {
             ret.push(graphic::Key::UpPlayer1)
         }
-        if self.input.key_released(Key::D) == true {
+        if self.input.key_released(Key::D) {
             ret.push(graphic::Key::DownPlayer1)
         }
-        if self.input.key_released(Key::O) == true {
+        if self.input.key_released(Key::O) {
             ret.push(graphic::Key::UpPlayer2)
         }
-        if self.input.key_released(Key::L) == true {
+        if self.input.key_released(Key::L) {
             ret.push(graphic::Key::DownPlayer2)
         }
-        if self.input.key_released(Key::K) == true {
+        if self.input.key_released(Key::K) {
             ret.push(graphic::Key::LeftPlayer2)
         }
-        if self.input.key_released(Key::M) == true {
+        if self.input.key_released(Key::M) {
             ret.push(graphic::Key::RightPlayer2)
         }
-        if self.input.key_released(Key::W) == true {
+        if self.input.key_released(Key::W) {
             ret.push(graphic::Key::Launch)
         }
-        if self.input.key_released(Key::F) == true {
+        if self.input.key_released(Key::F) {
             ret.push(graphic::Key::Forward)
         }
-        if self.input.key_released(Key::R) == true {
+        if self.input.key_released(Key::R) {
             ret.push(graphic::Key::Backward)
         }
-        if self.input.key_released(Key::S) == true {
+        if self.input.key_released(Key::S) {
             ret.push(graphic::Key::Save)
         }
         ret
@@ -188,7 +188,5 @@ pub fn colour_changer(rgba_colour_to_change: u32, ui: &mut Ui) -> u32 {
     let mut colour_player = Rgba::from_srgba_premultiplied(r, g, b, a);
     color_edit_button_rgba(ui, &mut colour_player, Alpha::Opaque);
     let convert_color = Rgba::to_srgba_unmultiplied(&colour_player);
-    let player_color = u32::from_le_bytes(convert_color);
-
-    player_color
+    u32::from_le_bytes(convert_color)
 }

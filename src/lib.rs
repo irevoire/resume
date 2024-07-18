@@ -1,5 +1,3 @@
-#![warn(clippy::all, rust_2018_idioms)]
-
 mod common;
 mod cv;
 mod life;

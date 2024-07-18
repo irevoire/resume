@@ -1,8 +1,5 @@
 use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
-use egui::{
-    color_picker::{color_edit_button_rgba, Alpha},
-    Rgba, Ui,
-};
+use egui::Ui;
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
 use web_time::Instant;
@@ -103,7 +100,7 @@ impl Pong {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        if self.config.player_1_pong.is_empty() == true {
+        if self.config.player_1_pong.is_empty() {
             creation_pongs(&mut self.config, &self.buffer)
         }
 

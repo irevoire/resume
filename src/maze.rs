@@ -1,7 +1,4 @@
-use egui::{
-    color_picker::{color_edit_button_rgba, Alpha},
-    Rgba, Ui,
-};
+use egui::Ui;
 use maze::start_end_generator;
 use maze::{display, MazeConfig, Player};
 use rand::SeedableRng;
@@ -71,9 +68,9 @@ impl Maze {
             let rgba_path = self.config.path_color;
             let mut path_color = colour_changer(rgba_path, ui);
             if path_color == wall_color && wall_color != u32::MAX {
-                path_color = path_color + 1;
+                path_color += 1;
             } else if path_color == wall_color && wall_color == u32::MAX {
-                path_color = path_color - 1;
+                path_color -= 1;
             }
             self.config.path_color = path_color;
 
@@ -90,9 +87,9 @@ impl Maze {
             let rgba_ending: u32 = self.player.finish_color;
             let mut ending_color = colour_changer(rgba_ending, ui);
             if ending_color == wall_color && wall_color != u32::MAX {
-                ending_color = ending_color + 1;
+                ending_color += 1;
             } else if ending_color == wall_color && wall_color == u32::MAX {
-                ending_color = ending_color - 1;
+                ending_color -= 1;
             }
             self.player.finish_color = ending_color;
 
@@ -110,7 +107,7 @@ impl Maze {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        let elapsed_time = Duration::from_millis(10 as u64);
+        let elapsed_time = Duration::from_millis(10_u64);
         ctx.input(|i| {
             let _ = self
                 .player
@@ -118,7 +115,7 @@ impl Maze {
         });
 
         if self.update_time_wait.elapsed() >= elapsed_time {
-            display(&mut self.player, &mut self.buffer);
+            display(&self.player, &mut self.buffer);
             self.player.direction(&self.buffer);
             self.update_time_wait = Instant::now();
         }

@@ -1,4 +1,3 @@
-use eframe::glow::Buffer;
 use egui::Ui;
 use snake::{display, go_display, return_in_time, snake_generator, Cli, Difficulty, Direction, TimeCycle, World};
 use web_time::{Duration, Instant};
@@ -223,7 +222,7 @@ impl Snake {
         });
 
         if self.config.time_cycle == TimeCycle::Forward {
-            if self.config.finished == false {
+            if !self.config.finished {
                 let elapsed_time = Duration::from_millis(self.config.snake_speed as u64);
 
                 if self.snake_instant.elapsed() >= elapsed_time {
@@ -241,7 +240,7 @@ impl Snake {
                 return_in_time(&mut self.config, &self.cli);
                 self.snake_instant = Instant::now();
             }
-            display(&mut self.config, &mut self.buffer, &self.cli);
+            display(&self.config, &mut self.buffer, &self.cli);
             self.config.time_cycle = TimeCycle::Pause;
         }
 
