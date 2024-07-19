@@ -14,7 +14,6 @@ pub struct Maze {
     player: Player,
     start_point: (usize, usize),
     update_time_wait: Instant,
-    opened_walls: usize,
 }
 
 impl Default for Maze {
@@ -44,7 +43,6 @@ impl Default for Maze {
             start_point,
             buffer,
             update_time_wait: Instant::now(),
-            opened_walls: 0,
         }
     }
 }
@@ -94,9 +92,6 @@ impl Maze {
             self.player.finish_color = ending_color;
 
             ui.separator();
-
-            ui.label("Difficulty:");
-            ui.add(egui::DragValue::new(&mut self.opened_walls).speed(1));
 
             let mut rng = rand::rngs::StdRng::seed_from_u64(self.seed);
             self.config.generate(&mut self.buffer, &mut rng);

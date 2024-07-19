@@ -31,6 +31,7 @@ game_of_life = {git = "https://github.com/NoodleSamaChan/rust_project.git", rev 
 serde = { version = "1", features = ["derive"] }
 rand = "0.8.5"
 web-time = "1.1.0"
+egui_extras = "0.28.1"
 
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
