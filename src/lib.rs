@@ -3,7 +3,6 @@ mod cv;
 mod life;
 mod maze;
 mod pong;
-mod popup;
 mod resume;
 mod snake;
 pub use common::{draw_window_buffer, InputWrapper};

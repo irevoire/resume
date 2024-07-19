@@ -1,4 +1,7 @@
-use crate::{common::{colour_changer, Game}, draw_window_buffer, InputWrapper};
+use crate::{
+    common::{colour_changer, Game},
+    draw_window_buffer, InputWrapper,
+};
 use egui::Ui;
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
@@ -100,7 +103,6 @@ impl Pong {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-
         self.update(ctx);
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
         egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));

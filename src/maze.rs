@@ -103,7 +103,6 @@ impl Maze {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
 
         egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
