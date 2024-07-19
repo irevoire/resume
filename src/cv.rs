@@ -1,5 +1,7 @@
 use egui::RichText;
 
+use crate::popup::{game_of_life_popup, maze_popup, pong_popup, snake_popup};
+
 #[derive(Clone, Default)]
 pub struct Cv {}
 
@@ -10,13 +12,12 @@ impl Cv {
             egui::SidePanel::left("left_panel")
             .resizable(true)
             .default_width(500.0)
-            .width_range(80.0..=500.0)
+            .width_range(80.0..=200.0)
             .show_inside(ui, |ui| {
                 ui.vertical_centered(|ui| {
                     ui.heading("At a glance");
                 });
                 egui::ScrollArea::vertical().show(ui, |ui| {
-                    ui.label("\n");
                     ui.label(RichText::new("LANGUAGES SPOKEN:").strong());
                     ui.label("French (native)");
                     ui.label("Italian (native)");
@@ -61,6 +62,14 @@ impl Cv {
                     ui.label(RichText::new("SOCIAL MEDIA:").strong());
                     ui.hyperlink_to("LinkedIn", "https://www.linkedin.com/in/luna-ferraraccio-01553a110/");
                     ui.hyperlink_to("GitHub", "https://github.com/NoodleSamaChan");
+
+                    ui.label("\n");
+                    ui.separator();
+
+                    ui.label(RichText::new("REPOS CONTRIBUTIONS:").strong());
+                    ui.hyperlink_to("Top 10 contributor of Meilisearch-Rust", "https://github.com/meilisearch/meilisearch-rust");
+                    ui.hyperlink_to("Lasr", "https://github.com/versatus/lasr");
+
                 });
             });
 
@@ -75,6 +84,7 @@ impl Cv {
                     ui.separator();
                     ui.add_space(20.);
                     ui.heading("Hello, my name is Luna Ferraraccio");
+                    ui.label("\n");
                     ui.label("\n");
                     ui.label("Junior Back-end developer seeking new opportunities. Before becoming a Rust back-end developer, I acutally used to work in communication.");
                     ui.label("\n");
@@ -142,14 +152,24 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    ui.hyperlink_to(" Snake", "https://github.com/NoodleSamaChan/snake");
+                    snake_popup(ui);
                     ui.label("\n");
+                    ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/snake");
+                    ui.label("\n");
+                    let mut theme = egui_extras::syntax_highlighting::CodeTheme::from_memory(ui.ctx());
+                        ui.collapsing("Snake", |ui| {
+                            ui.group(|ui| {
+                                theme.ui(ui);
+                                //snake.ui(ctx, frame);
+                                theme.clone().store_in_memory(ui.ctx());
+                            });
+                        });
                     ui.label("I've implemented number of functionalities with the Snake project. There's a classic mode of course, but you can setup a number of options should you wish to.");
                     ui.label("\n");
                     ui.label(RichText::new("Ghost mode: ").strong());
                     ui.label("will allow your snake to safely go through walls");
                     ui.label("\n");
-                    ui.label(RichText::new("Two players mode").strong());
+                    ui.label(RichText::new("Two players mode: ").strong());
                     ui.label("will create a second snake, if you wish to share a game locally with someone else.");
                     ui.label("\n");
                     ui.label(RichText::new("Bad berry mode: ").strong());
@@ -166,7 +186,10 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
+                    pong_popup(ui);
+                    ui.label("\n");
                     ui.hyperlink_to("Pong", "https://github.com/NoodleSamaChan/pong");
+                    ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/pong");
                     ui.label("\n");
                     ui.label(RichText::new("Speed of the pongs and the ball: ").strong());
                     ui.label("set the respective speeds of the pongs and the ball to make the game more or less challenging.");
@@ -176,7 +199,10 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
+                    maze_popup(ui);
+                    ui.label("\n");
                     ui.hyperlink_to("Maze", "https://github.com/NoodleSamaChan/naze");
+                    ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/naze");
                     ui.label("\n");
                     ui.label("Have fun finding your way out of the maze!");
                     ui.label("\n");
@@ -185,12 +211,25 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
+                    game_of_life_popup(ui);
+                    ui.label("\n");
                     ui.hyperlink_to("Game of Life", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
+                    ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
                     ui.label("\n");
                     ui.label("The famous game of life");
                     ui.label("\n");
                     ui.label(RichText::new("Change the colour: ").strong());
                     ui.label("personalise the colours of whichever element of the game you want");
+                    ui.label("\n");
+                    ui.label("\n");
+
+                    ui.label(RichText::new("This resume :)").strong());
+                    ui.label("\n");
+                    ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/resume");
+                    ui.label("\n");
+                    ui.label("I have coded my resume entirely in eGui, which necessitated for me to understand the best way to transpose the code of all my games with this graphic library.");
+                    ui.label("\n");
+                    ui.label("\n");
 
                 });
             });
