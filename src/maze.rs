@@ -136,4 +136,8 @@ impl Game for Maze {
     fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         draw_window_buffer(ui, &self.buffer)
     }
+    
+    fn resize(&mut self, ui: &mut egui::Ui) {
+        todo!()
+    }
 }

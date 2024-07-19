@@ -98,4 +98,8 @@ impl Game for Life {
         ctx.request_repaint();
         draw_window_buffer(ui, &self.buffer)
     }
+    
+    fn resize(&mut self, ui: &mut egui::Ui) {
+        todo!()
+    }
 }

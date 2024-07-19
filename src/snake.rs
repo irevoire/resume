@@ -49,32 +49,7 @@ impl Default for Snake {
             two_players_mode: false,
         };
         let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
-        let config = World::new(
-            Direction::Still,
-            vec![Direction::Still],
-            Vec::new(),
-            (0, 0),
-            false,
-            Instant::now(),
-            0,
-            cli.snake_speed,
-            0,
-            0,
-            None,
-            Vec::new(),
-            TimeCycle::Forward,
-            Some(Vec::new()),
-            vec![Direction::Still],
-            Some(Vec::new()),
-            Direction::Still,
-            0,
-            0x0033CCFF,
-            0x00CC66FF,
-            0x00CC33FF,
-            0x00FFCC00,
-            0x0066CC33,
-            0x00FF0000,
-        );
+        let config = create_world(cli.snake_speed);
         let options = SnakeOptions {
             snake_speed: 30,
             two_player: false,
@@ -300,4 +275,46 @@ impl Game for Snake {
         ctx.request_repaint();
         draw_window_buffer(ui, &self.buffer)
     }
+
+    fn resize(&mut self, ui: &mut egui::Ui) {
+
+        let size = 30.0;
+        
+        let max_width = (ui.available_width() / size) as usize;
+        let max_height = (ui.available_height() / size) as usize;
+
+        self.buffer = WindowBuffer::new(max_width, max_height);
+        self.config = create_world(self.cli.snake_speed);
+        println!("{}, {}", max_height, max_width);
+    }
+}
+
+fn create_world(snake_speed: usize) -> World {
+    World::new(
+        Direction::Still,
+            vec![Direction::Still],
+            Vec::new(),
+            (0, 0),
+            false,
+            Instant::now(),
+            0,
+            snake_speed,
+            0,
+            0,
+            None,
+            Vec::new(),
+            TimeCycle::Forward,
+            Some(Vec::new()),
+            vec![Direction::Still],
+            Some(Vec::new()),
+            Direction::Still,
+            0,
+            0x0033CCFF,
+            0x00CC66FF,
+            0x00CC33FF,
+            0x00FFCC00,
+            0x0066CC33,
+            0x00FF0000,
+    )
+        
 }

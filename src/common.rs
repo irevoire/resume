@@ -18,6 +18,8 @@ pub trait Game: Default {
 
     /// Redraw the game in the specified ui.
     fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui);
+
+    fn resize(&mut self, ui: &mut egui::Ui);
 }
 
 pub struct InputWrapper<'a> {
