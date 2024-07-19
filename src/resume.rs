@@ -3,7 +3,6 @@ use crate::{cv::Cv, life::Life, maze::Maze, pong::Pong, snake::Snake};
 #[derive(Default)]
 pub struct Resume {
     viewing: View,
-    #[allow(dead_code)]
     cv: Cv,
     snake: Snake,
     pong: Pong,
