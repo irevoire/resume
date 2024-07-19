@@ -5,6 +5,7 @@ use rand::SeedableRng;
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
+use crate::common::Game;
 use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
 
 pub struct Maze {
@@ -102,6 +103,23 @@ impl Maze {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        
+        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
+
+        egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
+    }
+}
+
+impl Game for Maze {
+    fn name() -> &'static str {
+        "Maze"
+    }
+
+    fn github() -> &'static str {
+        "https://github.com/NoodleSamaChan/naze"
+    }
+
+    fn update(&mut self, ctx: &egui::Context) {
         let elapsed_time = Duration::from_millis(10_u64);
         ctx.input(|i| {
             let _ = self
@@ -114,8 +132,9 @@ impl Maze {
             self.player.direction(&self.buffer);
             self.update_time_wait = Instant::now();
         }
-        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
+    }
 
-        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
+    fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
+        draw_window_buffer(ui, &self.buffer)
     }
 }

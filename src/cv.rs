@@ -1,10 +1,13 @@
 use egui::{special_emojis::GITHUB, RichText};
 
-use crate::{common::Game, snake::Snake};
+use crate::{common::Game, life::Life, maze::Maze, pong::Pong, snake::Snake};
 
 #[derive(Default)]
 pub struct Cv {
     snake: WindowedGame<Snake>,
+    pong: WindowedGame<Pong>,
+    maze: WindowedGame<Maze>,
+    life: WindowedGame<Life>,
 }
 
 #[derive(Default)]
@@ -179,21 +182,12 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    if ui.button(" Snake").clicked() {
+                    if ui.button("Snake").clicked() {
                         self.snake.clicked();
                     };
-
                     ui.label("\n");
                     ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/snake");
                     ui.label("\n");
-                    let mut theme = egui_extras::syntax_highlighting::CodeTheme::from_memory(ui.ctx());
-                        ui.collapsing("Snake", |ui| {
-                            ui.group(|ui| {
-                                theme.ui(ui);
-                                //snake.ui(ctx, frame);
-                                theme.clone().store_in_memory(ui.ctx());
-                            });
-                        });
                     ui.label("I've implemented number of functionalities with the Snake project. There's a classic mode of course, but you can setup a number of options should you wish to.");
                     ui.label("\n");
                     ui.label(RichText::new("Ghost mode: ").strong());
@@ -216,7 +210,9 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    pong_popup(ui);
+                    if ui.button("Pong").clicked() {
+                        self.pong.clicked();
+                    };
                     ui.label("\n");
                     ui.hyperlink_to("Pong", "https://github.com/NoodleSamaChan/pong");
                     ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/pong");
@@ -229,7 +225,9 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    maze_popup(ui);
+                    if ui.button("Maze").clicked() {
+                        self.maze.clicked();
+                    };
                     ui.label("\n");
                     ui.hyperlink_to("Maze", "https://github.com/NoodleSamaChan/naze");
                     ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/naze");
@@ -241,7 +239,9 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    game_of_life_popup(ui);
+                    if ui.button("Game of Life").clicked() {
+                        self.life.clicked();
+                    };
                     ui.label("\n");
                     ui.hyperlink_to("Game of Life", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
                     ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
@@ -266,5 +266,9 @@ impl Cv {
         });
         // Draw all the game at the end to be sure they're drawn over the resume
         self.snake.handle(ctx);
+        self.pong.handle(ctx);
+        self.maze.handle(ctx);
+        self.life.handle(ctx);
+
     }
 }

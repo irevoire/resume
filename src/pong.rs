@@ -1,4 +1,4 @@
-use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
+use crate::{common::{colour_changer, Game}, draw_window_buffer, InputWrapper};
 use egui::Ui;
 use pong::{creation_pongs, display, Cli, Difficulty, World};
 use rand::SeedableRng;
@@ -100,6 +100,23 @@ impl Pong {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+
+        self.update(ctx);
+        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
+        egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
+    }
+}
+
+impl Game for Pong {
+    fn name() -> &'static str {
+        "Pong"
+    }
+
+    fn github() -> &'static str {
+        "https://github.com/NoodleSamaChan/pong"
+    }
+
+    fn update(&mut self, ctx: &egui::Context) {
         if self.config.player_1_pong.is_empty() {
             creation_pongs(&mut self.config, &self.buffer)
         }
@@ -117,10 +134,10 @@ impl Pong {
             &mut self.instant_ball,
         );
         display(&self.config, &mut self.buffer);
+    }
+
+    fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         ctx.request_repaint();
-
-        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-
-        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
+        draw_window_buffer(ui, &self.buffer)
     }
 }

@@ -3,7 +3,7 @@ use game_of_life::{Cli, World};
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
-use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
+use crate::{common::{colour_changer, Game}, draw_window_buffer, InputWrapper};
 
 pub struct Life {
     cli: Cli,
@@ -62,6 +62,24 @@ impl Life {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        
+
+        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
+
+        egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
+    }
+}
+
+impl Game for Life {
+    fn name() -> &'static str {
+        "Game of life"
+    }
+
+    fn github() -> &'static str {
+        "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life"
+    }
+
+    fn update(&mut self, ctx: &egui::Context) {
         ctx.input(|i| {
             let _ = self
                 .config
@@ -74,10 +92,11 @@ impl Life {
             self.time_check = Instant::now();
         }
 
+        
+    }
+
+    fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         ctx.request_repaint();
-
-        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-
-        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
+        draw_window_buffer(ui, &self.buffer)
     }
 }
