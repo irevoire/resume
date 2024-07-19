@@ -5,6 +5,21 @@ use egui::{
 use graphic::Graphic;
 use window_rs::WindowBuffer;
 
+/// This trait define the method that everygame should provides.
+pub trait Game: Default {
+    /// The name of the game
+    fn name() -> &'static str;
+    /// The link to the github repositiory
+    fn github() -> &'static str;
+
+    /// Update all the internal state of the game.
+    /// Will be called on every frame the game is being played.
+    fn update(&mut self, ctx: &egui::Context);
+
+    /// Redraw the game in the specified ui.
+    fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui);
+}
+
 pub struct InputWrapper<'a> {
     pub input: &'a InputState,
 }

@@ -6,7 +6,10 @@ use snake::{
 use web_time::{Duration, Instant};
 use window_rs::WindowBuffer;
 
-use crate::{common::colour_changer, draw_window_buffer, InputWrapper};
+use crate::{
+    common::{colour_changer, Game},
+    draw_window_buffer, InputWrapper,
+};
 
 pub struct Snake {
     buffer: WindowBuffer,
@@ -235,6 +238,21 @@ impl Snake {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.update(ctx);
+        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
+        egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
+    }
+}
+
+impl Game for Snake {
+    fn name() -> &'static str {
+        "Snake"
+    }
+    fn github() -> &'static str {
+        "https://github.com/NoodleSamaChan/snake"
+    }
+
+    fn update(&mut self, ctx: &egui::Context) {
         if self.config.food == (0, 0) {
             self.config.food_generator(&self.buffer, &self.cli)
         };
@@ -276,11 +294,10 @@ impl Snake {
             display(&self.config, &mut self.buffer, &self.cli);
             self.config.time_cycle = TimeCycle::Pause;
         }
+    }
 
+    fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         ctx.request_repaint();
-
-        egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-
-        egui::CentralPanel::default().show(ctx, |ui| draw_window_buffer(ui, &self.buffer));
+        draw_window_buffer(ui, &self.buffer)
     }
 }
