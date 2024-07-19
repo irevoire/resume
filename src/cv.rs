@@ -1,10 +1,38 @@
-use egui::RichText;
+use egui::{special_emojis::GITHUB, RichText};
 
-#[derive(Clone, Default)]
-pub struct Cv {}
+use crate::{common::Game, snake::Snake};
+
+#[derive(Default)]
+pub struct Cv {
+    snake: WindowedGame<Snake>,
+}
+
+#[derive(Default)]
+struct WindowedGame<G: Game> {
+    /// When `true` it means the window is currently opened.
+    opened: bool,
+    /// The internal states of the game.
+    game: G,
+}
+
+impl<G: Game> WindowedGame<G> {
+    pub fn clicked(&mut self) {
+        self.opened = !self.opened;
+    }
+
+    pub fn handle(&mut self, ctx: &egui::Context) {
+        if self.opened {
+            self.game.update(ctx);
+            egui::Window::new(G::name()).open(&mut self.opened).show(ctx, |ui| {
+                ui.hyperlink_to(format!("{GITHUB} Source code"), G::github());
+                self.game.draw(ctx, ui);
+            });
+        }
+    }
+}
 
 impl Cv {
-    pub fn cv(ctx: &egui::Context) {
+    pub fn ui(&mut self, ctx: &egui::Context) {
         egui::CentralPanel::default().show(ctx, |ui| {
 
             egui::SidePanel::left("left_panel")
@@ -142,7 +170,9 @@ impl Cv {
                     ui.label("\n");
                     ui.label("\n");
 
-                    ui.hyperlink_to(" Snake", "https://github.com/NoodleSamaChan/snake");
+                    if ui.button(" Snake").clicked() {
+                        self.snake.clicked();
+                    };
                     ui.label("\n");
                     ui.label("I've implemented number of functionalities with the Snake project. There's a classic mode of course, but you can setup a number of options should you wish to.");
                     ui.label("\n");
@@ -195,5 +225,7 @@ impl Cv {
                 });
             });
         });
+        // Draw all the game at the end to be sure they're drawn over the resume
+        self.snake.handle(ctx);
     }
 }

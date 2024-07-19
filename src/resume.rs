@@ -46,7 +46,7 @@ impl Resume {
             });
         });
         match self.viewing {
-            View::Resume => Cv::cv(ctx),
+            View::Resume => self.cv.ui(ctx),
             View::Snake => self.snake.ui(ctx, frame),
             View::Pong => self.pong.ui(ctx, frame),
             View::Maze => self.maze.ui(ctx, frame),
