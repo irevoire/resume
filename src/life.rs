@@ -100,6 +100,24 @@ impl Game for Life {
     }
     
     fn resize(&mut self, ui: &mut egui::Ui) {
-        todo!()
+        let size = 30.0;
+        
+        let max_width = (ui.available_width() / size) as usize;
+        let max_height = (ui.available_height() / size) as usize;
+
+        self.buffer = WindowBuffer::new(max_width, max_height);
+        self.config = create_world(self.cli.width, self.cli.height);
+        println!("{}, {}", max_height, max_width);
     }
+}
+
+fn create_world(width: usize, height: usize) -> World {
+    World::new(
+        WindowBuffer::new(width, height),
+            0,
+            Instant::now(),
+            2,
+            0x0066CC33,
+    )
+        
 }
