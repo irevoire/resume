@@ -273,7 +273,7 @@ impl Game for Snake {
 
     fn draw(&mut self, ctx: &egui::Context, ui: &mut egui::Ui) {
         ctx.request_repaint();
-        draw_window_buffer(ui, &self.buffer)
+        draw_window_buffer(ui, &self.buffer);
     }
 
     fn resize(&mut self, ui: &mut egui::Ui) {

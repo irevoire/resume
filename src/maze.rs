@@ -103,8 +103,8 @@ impl Maze {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.update(ctx);
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-
         egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
     }
 }
@@ -131,6 +131,7 @@ impl Game for Maze {
             self.player.direction(&self.buffer);
             self.update_time_wait = Instant::now();
         }
+        println!("{:#?}", self.player.direction);
     }
 
     fn draw(&mut self, _ctx: &egui::Context, ui: &mut egui::Ui) {
