@@ -14,6 +14,7 @@ pub struct Pong {
     instant_ball: Instant,
     instant_pong: Instant,
     cli: Cli,
+    seed: u64,
 }
 
 impl Default for Pong {
@@ -54,6 +55,7 @@ impl Default for Pong {
             instant_ball: Instant::now(),
             instant_pong: Instant::now(),
             cli,
+            seed,
         }
     }
 }
@@ -144,6 +146,34 @@ impl Game for Pong {
     }
     
     fn resize(&mut self, ui: &mut egui::Ui) {
-        todo!()
+        let size = 30.0;
+        
+        let max_width = (ui.available_width() / size) as usize;
+        let max_height = (ui.available_height() / size) as usize;
+
+        self.buffer = WindowBuffer::new(max_width, max_height);
+        self.config = create_world(max_width, max_height, self.cli.pong_speed, self.cli.ball_speed, self.seed);
     }
 }
+
+fn create_world(width: usize, height: usize, pong_speed: usize, ball_speed: usize, seed: u64) -> World {
+    World::new(
+            Vec::new(),
+            Vec::new(),
+            0,
+            0,
+            pong::Direction::Still,
+            pong::Direction::Still,
+            Some((width / 2, height / 2)),
+            pong::BallDirection::Still,
+            false,
+            Instant::now(),
+            0,
+            pong_speed,
+            ball_speed,
+            rand::rngs::StdRng::seed_from_u64(seed),
+            0x00FF0000,
+            0xFF00FF00,
+            0xFFFFFF00,)   
+}
+

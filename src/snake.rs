@@ -315,6 +315,5 @@ fn create_world(snake_speed: usize) -> World {
             0x00FFCC00,
             0x0066CC33,
             0x00FF0000,
-    )
-        
+    )     
 }
