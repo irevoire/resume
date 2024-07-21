@@ -37,19 +37,6 @@ pub struct SnakeOptions {
 
 impl Default for Snake {
     fn default() -> Self {
-        let cli = Cli {
-            width: 80,
-            height: 50,
-            snake_size_start: 3,
-            file_path: None,
-            snake_speed: 30,
-            speed_increase: Difficulty::Medium,
-            bad_berries: false,
-            ghost_mode: false,
-            two_players_mode: false,
-        };
-        let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
-        let config = create_world(cli.snake_speed);
         let options = SnakeOptions {
             snake_speed: 30,
             two_player: false,
@@ -64,6 +51,19 @@ impl Default for Snake {
             bad_berry_colour: 0x00FF0000,
             points_to_reach: 15,
         };
+        let cli = Cli {
+            width: 80,
+            height: 50,
+            snake_size_start: 3,
+            file_path: None,
+            snake_speed: 30,
+            speed_increase: Difficulty::Medium,
+            bad_berries: false,
+            ghost_mode: false,
+            two_players_mode: false,
+        };
+        let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
+        let config = create_world(cli.snake_speed);
         Self {
             buffer,
             config,
@@ -249,7 +249,7 @@ impl Game for Snake {
 
         if self.config.time_cycle == TimeCycle::Forward {
             if !self.config.finished {
-                let elapsed_time = Duration::from_millis(self.config.snake_speed as u64);
+                let elapsed_time = Duration::from_millis(self.cli.snake_speed as u64);
 
                 if self.snake_instant.elapsed() >= elapsed_time {
                     self.config.update(&mut self.buffer, &self.cli);
