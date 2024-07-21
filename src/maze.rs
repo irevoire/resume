@@ -131,7 +131,6 @@ impl Game for Maze {
             self.player.direction(&self.buffer);
             self.update_time_wait = Instant::now();
         }
-        println!("{:#?}", self.player.direction);
     }
 
     fn draw(&mut self, _ctx: &egui::Context, ui: &mut egui::Ui) {
@@ -151,11 +150,11 @@ impl Game for Maze {
         let config = self.config.clone();
         self.player = create_world(config);
         start_end_generator(&mut self.buffer, &mut rng, &mut self.player);
-        println!("{}, {}", max_height, max_width);
     }
 }
 
 fn create_world(config: MazeConfig) -> Player {
+    
     Player::new(
             (0, 0),
             (0, 0),
@@ -163,5 +162,5 @@ fn create_world(config: MazeConfig) -> Player {
             (0, 0),
             config.clone(),
             false,
-    )       
+    )
 }

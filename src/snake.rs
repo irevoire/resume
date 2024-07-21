@@ -191,14 +191,14 @@ impl Snake {
             ui.separator();
 
             ui.label("Player 1 points:");
-            let mut points = self.config.score.clone() as f32;
+            let mut points = self.config.score as f32;
             let max = (self.points_to_reach as f32) * 10.0;
             ui.add(egui::Slider::new(&mut points, 0.0..=max).suffix("points"));
 
             ui.separator();
 
             ui.label("Player 2 points:");
-            let mut points = self.config.second_score.clone() as f32;
+            let mut points = self.config.second_score as f32;
             let max = (self.points_to_reach as f32) * 10.0;
             ui.add(egui::Slider::new(&mut points, 0.0..=max).suffix("points"));
 
@@ -285,7 +285,6 @@ impl Game for Snake {
 
         self.buffer = WindowBuffer::new(max_width, max_height);
         self.config = create_world(self.cli.snake_speed);
-        println!("{}, {}", max_height, max_width);
     }
 }
 
