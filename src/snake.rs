@@ -38,11 +38,11 @@ pub struct SnakeOptions {
 impl Default for Snake {
     fn default() -> Self {
         let options = SnakeOptions {
-            snake_speed: 30,
+            snake_speed: 60,
             two_player: false,
             bad_berries: false,
             snake_size: 3,
-            ghost_mode: false,
+            ghost_mode: true,
             first_snake_colour: 0x0033CCFF,
             first_snake_head_colour: 0x00CC66FF,
             second_snake_colour: 0x00CC33FF,
@@ -56,10 +56,10 @@ impl Default for Snake {
             height: 50,
             snake_size_start: 3,
             file_path: None,
-            snake_speed: 30,
+            snake_speed: 60,
             speed_increase: Difficulty::Medium,
             bad_berries: false,
-            ghost_mode: false,
+            ghost_mode: true,
             two_players_mode: false,
         };
         let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
