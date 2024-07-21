@@ -18,8 +18,8 @@ pub struct Life {
 impl Default for Life {
     fn default() -> Self {
         let cli = Cli {
-            width: 30,
-            height: 30,
+            width: 100,
+            height: 100,
             file_path: None,
         };
         let buffer: WindowBuffer = WindowBuffer::new(cli.width, cli.height);
@@ -65,8 +65,8 @@ impl Life {
     }
 
     pub fn ui(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        self.update(ctx);
         egui::SidePanel::right("Configuration").show(ctx, |ui| self.configuration(ui));
-
         egui::CentralPanel::default().show(ctx, |ui| self.draw(ctx, ui));
     }
 }
@@ -107,7 +107,6 @@ impl Game for Life {
 
         self.buffer = WindowBuffer::new(max_width, max_height);
         self.config = create_world(self.cli.width, self.cli.height);
-        println!("{}, {}", max_height, max_width);
     }
 }
 
@@ -119,5 +118,4 @@ fn create_world(width: usize, height: usize) -> World {
             2,
             0x0066CC33,
     )
-        
 }

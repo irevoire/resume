@@ -142,11 +142,13 @@ impl Graphic for InputWrapper<'_> {
     fn get_mouse_pos(&self, mouse: graphic::Mouse) -> Option<(f32, f32)> {
         let ret = self.input.pointer.interact_pos()?;
         let retured_pos = (ret[0], ret[1]);
+        println!("mouse position: {:#?}", retured_pos);
         let clicked = match mouse {
-            graphic::Mouse::Left => self.input.pointer.primary_clicked(),
-            graphic::Mouse::Right => self.input.pointer.secondary_clicked(),
-            graphic::Mouse::Discard => self.input.pointer.secondary_clicked(),
-        };
+            graphic::Mouse::Left => self.input.pointer.any_pressed(),
+            graphic::Mouse::Right => self.input.pointer.any_pressed(),
+            graphic::Mouse::Discard => self.input.pointer.any_pressed(),
+        }; 
+        print!("first click is {}", clicked);
         if clicked {
             Some(retured_pos)
         } else {
@@ -155,10 +157,11 @@ impl Graphic for InputWrapper<'_> {
     }
 
     fn get_mouse_down(&self, mouse: graphic::Mouse) -> bool {
+        println!("mouse clicked");
         match mouse {
-            graphic::Mouse::Left => self.input.pointer.primary_clicked(),
-            graphic::Mouse::Right => self.input.pointer.secondary_clicked(),
-            graphic::Mouse::Discard => self.input.pointer.secondary_clicked(),
+            graphic::Mouse::Left => self.input.pointer.any_pressed(),
+            graphic::Mouse::Right => self.input.pointer.any_pressed(),
+            graphic::Mouse::Discard => self.input.pointer.any_pressed(),
         }
     }
 }

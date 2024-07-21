@@ -206,8 +206,6 @@ impl Cv {
                             
                         };
                         ui.label("\n");
-                        ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/snake");
-                        ui.label("\n");
                         ui.label("I've implemented number of functionalities with the Snake project. There's a classic mode of course, but you can setup a number of options should you wish to.");
                         ui.label("\n");
                         ui.label(RichText::new("Ghost mode: ").strong());
@@ -231,12 +229,8 @@ impl Cv {
                         ui.label("\n");
 
                         if ui.button("Pong").clicked() {
-                            ui.set_min_size((800.0, 800.0).into());
                             self.pong.clicked();
                         };
-                        ui.label("\n");
-                        ui.hyperlink_to("Pong", "https://github.com/NoodleSamaChan/pong");
-                        ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/pong");
                         ui.label("\n");
                         ui.label(RichText::new("Speed of the pongs and the ball: ").strong());
                         ui.label("set the respective speeds of the pongs and the ball to make the game more or less challenging.");
@@ -247,12 +241,8 @@ impl Cv {
                         ui.label("\n");
 
                         if ui.button("Maze").clicked() {
-                            ui.set_min_size((800.0, 800.0).into());
                             self.maze.clicked();
                         };
-                        ui.label("\n");
-                        ui.hyperlink_to("Maze", "https://github.com/NoodleSamaChan/naze");
-                        ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/naze");
                         ui.label("\n");
                         ui.label("Have fun finding your way out of the maze!");
                         ui.label("\n");
@@ -262,12 +252,8 @@ impl Cv {
                         ui.label("\n");
 
                         if ui.button("Game of Life").clicked() {
-                            ui.set_min_size((800.0, 800.0).into());
                             self.life.clicked();
                         };
-                        ui.label("\n");
-                        ui.hyperlink_to("Game of Life", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
-                        ui.hyperlink_to("GitHub Repo", "https://github.com/NoodleSamaChan/rust_project/tree/main/game_of_life");
                         ui.label("\n");
                         ui.label("The famous game of life");
                         ui.label("\n");
